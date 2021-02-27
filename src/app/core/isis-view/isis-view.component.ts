@@ -1,9 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Compiler, Component, ComponentFactory, ComponentRef, ElementRef, ModuleWithComponentFactories, NgModule, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { from, Subscription } from 'rxjs';
+import { Pagecms, pagecms } from '../../data-model/pagecms';
 import { CmsService } from '../cms.service';
+import { MessageService } from '../message.service';
 import { CoreModule } from '../core.module';
 import { RuntimeComponent } from '../runtime.component';
+import { ThemeCms } from 'src/app/data-model/theme-cms';
 
 @Component({
   selector: 'isis',
@@ -14,7 +17,13 @@ export class IsisViewComponent implements OnInit {
 
 
   constructor(private cmsService: CmsService ,private hostElement: ElementRef ,
-      private compiler: Compiler ) { }
+      private compiler: Compiler ,private messageService: MessageService ) {
+
+          this.subscription = this.messageService.getMessage().subscribe(message=>{
+            this.currentmodule=message;
+            //this.showView();
+        });
+    }
 
      
   /**
@@ -54,24 +63,66 @@ export class IsisViewComponent implements OnInit {
       return module.componentFactories.find(f => f.componentType === decoratedCmp);
   }
 
+  private getPage(value: any): Pagecms {
+    return new Pagecms(value.pK,value.code,value.name,value.cssStyle,value.htmlTemplate);
+  }
   /**
      * Section of function
      */
     /**
      * name
      */
-    public showView() {
-      console.log("============================================= "+this.modulescreen);
-      if(this.modulescreen=="modules"){
-          this.modulescreen = "module";
-          //this.currentmodule = modulename;
-      }else{
-          this.modulescreen = "modules";
-      }//end f(this.modulescreen=="modules"){         
+    public showView(response: any) {
+      this.theme = new ThemeCms(response.pK,response.code,response.name,response.active);            
+      
+      if(response.loginTemplate != null){
+         this.theme.setLoginTemplate(this.getPage((response.loginTemplate));
+      }
+
+      if(response.homeTemple != null){
+        this.theme.setHomeTemplate(this.getPage(response.homeTemple));
+      }
+
+      if(response.moduleTemplate != null){
+        this.theme.setModuleTemplate(this.getPage(response.moduleTemplate));
+      }
+
+      if(this.theme == null){
+         return ;
+      }
+     
+      if(this.session == null){
+
+        if(this.theme.getLoginTemplate() == null){
+          //Show error page to notify that the theme is not correct
+          return;
+        }
+        this.pageTemplate = this.theme.getLoginTemplate();
+        this.cmsService.getTemplatePage(this.pageTemplate.getCode())
+                       .toPromise()
+                       .then(response => {
+                        this.pageTemplate = this.getPage(response);
+                        this.initView();
+                       }).catch(error =>{
+                        console.log("Promise rejected with " + JSON.stringify(error));
+                       });
+
+      }
+
+  }
+
+  public initView(){
+    this.compileTemplate(this.pageTemplate.htmlTemplate,[this.pageTemplate.getCssStyle()]); 
   }
 
   ngOnInit(){
-      this.compileTemplate(this.cmsService.defaultscreen(this.modulescreen),[]); 
+      this.cmsService.getActiveTheme()
+          .toPromise()
+          .then((response) =>{
+            this.showView(response)
+          }).catch((error) =>{
+             console.log("Promise rejected with " + JSON.stringify(error));
+          });      
       //console.log("Call of the IHM builder "+this.hostElement.nativeElement.querySelector('#container').outerHTML);
    }
 
@@ -98,12 +149,16 @@ export class IsisViewComponent implements OnInit {
   
   subscription: Subscription;
 
+  theme: ThemeCms;
+
+  pageTemplate: Pagecms;
+
+  session: any = null;
+
   public template : any = null;
 
   public styles : any =null ;
   
-  public modulescreen : string = "modules" ;
-
   public  screen :string = "module"
 
   public currentmodule : string = null;

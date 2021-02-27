@@ -1,0 +1,6 @@
+{
+    "baseUrl": "http://localhost:8080/",
+    "cmsPageUrl": "cms/page",
+    "cmsFragmentUrl": "cms/fragment",
+    "cmsThemeUrl": "cms/theme"
+}
