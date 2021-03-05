@@ -14,6 +14,6 @@ export class SharedService {
   getModules(){ return this.modules ;}
   setModules(modules: Module[]){ this.modules = modules ;}
 
-  private module : Module = new Object();
+  private module :Module ;
   private modules :Module[] = [];
 }

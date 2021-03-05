@@ -1,5 +1,3 @@
-import { CommonModule } from '@angular/common';
-
 export class Navigation {
     private code: string;
     private activate: boolean;

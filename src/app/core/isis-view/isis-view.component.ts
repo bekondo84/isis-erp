@@ -100,25 +100,8 @@ export class IsisViewComponent implements OnInit {
      */
     public showView(pageType : string ,name :string ) {     
       this.showPage(pageType);    
-  }
+  } 
   
-  /**
-   * Load available install modules and set the current module to the first
-   * loadAvailableModule
-   */
-  public loadAvailableModule(pageType : string) {
-    this.moduleService.getInstallModules(0,20).toPromise()
-    .then(response => {
-      this.modules = new Array();
-      response.forEach(element => {
-        this.modules.push(Module.getInstance(element));
-        this.currentmodule = this.modules[0];
-        this.showPage(pageType);      
-      });     
-    }).catch(err => {
-        console.error(err);
-    });
-  }
   /**
    * 
    * @param pagetype Show page to load
