@@ -23,10 +23,5 @@ export class PageCmsService {
       return  this.http.get<Pagecms>(url);
   }
 
-  const optionRequete = {
-    headers: new HttpHeaders({ 
-      'Access-Control-Allow-Origin':'*'
-    }),
-    withCredentials: true
-  };
+ 
 }
