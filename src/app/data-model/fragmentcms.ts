@@ -31,4 +31,8 @@ export class Fragmentcms {
 
    getHtmlTemplate(){ return this.htmlTemplate; }
    setHtmlTemplate(value: string){ this.htmlTemplate = value; }
+
+   static getFragment(data: any){
+       return new Fragmentcms(data.pK,data.code,data.name,data.cssStype,data.htmlTemplate);
+   }
 }

@@ -5,7 +5,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { ConfigService } from './config.service';
 import { PageCmsService } from './page-cms.service';
 import { ThemeCmsService } from './theme-cms.service';
-import { from } from 'rxjs';
+import { FragmentService } from './fragment.service';
+import { DataModelService } from './data-model.service';
   
 
 @NgModule({
@@ -15,6 +16,6 @@ import { from } from 'rxjs';
     BrowserModule
   ],
   declarations: [],
-  providers: [ConfigService ,PageCmsService ,ThemeCmsService]
+  providers: [ConfigService ,PageCmsService ,ThemeCmsService ,FragmentService ,DataModelService]
 })
 export class DataSourceModule { }

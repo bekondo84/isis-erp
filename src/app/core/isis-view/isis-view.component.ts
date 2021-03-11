@@ -9,6 +9,9 @@ import { ModuleService } from '../../data-source/module.service';
 import { RuntimeComponent } from '../runtime.component';
 import { ThemeCms } from 'src/app/data-model/theme-cms';
 import { Module } from 'src/app/data-model/module';
+import { CoreModule } from '../core.module';
+import { SharedService } from 'src/app/data-source/shared.service';
+import { Fragmentcms } from 'src/app/data-model/fragmentcms';
 
 @Component({
   selector: 'isis',
@@ -20,10 +23,12 @@ export class IsisViewComponent implements OnInit {
 
   constructor(private cmsService: CmsService ,private hostElement: ElementRef ,
       private compiler: Compiler ,private messageService: MessageService ,
-      private moduleService: ModuleService) {
+      private moduleService: ModuleService ,private sharedService: SharedService) {
         this.subscription = this.messageService.getMessage().subscribe(message=>{
-          
-           this.showView(message.data.pageType ,message.data.moduleName);          
+         
+          if(message.data.type===ServiceLocator.typeEvents[0]){
+           this.showView(message.data.pageType ,message.data.moduleName);
+          }          
        });
       }
     
@@ -56,8 +61,8 @@ export class IsisViewComponent implements OnInit {
     private createComponentFactorySync(compiler: Compiler, metadata: Component, componentClass: any): ComponentFactory<any> {
       const cmpClass = componentClass || class RuntimeComponent { name: string = 'Denys' };
       const decoratedCmp = Component(metadata)(cmpClass);
-      
-      @NgModule({ imports: [CommonModule], declarations: [decoratedCmp] })
+       
+      @NgModule({ imports: [CommonModule,CoreModule], declarations: [decoratedCmp] })
       class RuntimeComponentModule { }
      try{
        //Clear the cache before create new module
@@ -73,6 +78,9 @@ export class IsisViewComponent implements OnInit {
     return new Pagecms(value.pK,value.code,value.name,value.cssStyle,value.htmlTemplate);
   }
 
+  private getFragment(value: any): Fragmentcms{
+     return new Fragmentcms(value.pK,value.code,value.name,value.cssStyle,value.htmlTemplate);
+  }
  
   /**
    * 
@@ -91,6 +99,15 @@ export class IsisViewComponent implements OnInit {
       if(response.moduleTemplate != null){
         this.theme.setModuleTemplate(this.getPage(response.moduleTemplate));
       }
+
+      if(response.listTemplate != null){
+        this.theme.setListTemplate(this.getFragment(response.listTemplate));
+      }
+
+      if(response.viewTemplate != null){
+        this.theme.setViewTemplate(this.getFragment(response.viewTemplate));
+      }
+      this.sharedService.setTheme(this.theme);
   }
   /**
      * Section of function
@@ -146,7 +163,7 @@ export class IsisViewComponent implements OnInit {
           .toPromise()
           .then((response) =>{
             this.setCurrentTheme(response);
-            this.showView(ServiceLocator.loginPageTypeValue ,null);
+            this.showView(ServiceLocator.loginPageTypeValue ,null);            
           }).catch((error) =>{
              console.error(error);
           });      
@@ -185,10 +202,8 @@ export class IsisViewComponent implements OnInit {
 
   public template : any = null;
 
-  public styles : any =null ;
+  public styles : any =null ;  
   
-  public  screen :string = "module"
-
   currentmodule : Module = null;
   modules :Module[] = [];
   

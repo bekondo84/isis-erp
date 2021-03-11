@@ -4,22 +4,19 @@ import { ServiceLocator } from './locator.service';
 import { ModuleService } from '../data-source/module.service';
 import { Module } from '../data-model/module';
 import { SharedService } from '../data-source/shared.service';
+import { Navigation } from '../data-model/navigation';
 
 export class RuntimeComponent{
 
     public loader ;
-    /**
-     * 
-     */
-    //@Input() modulescreen : string  ;
 
-   
     name: string = 'Denys'
       
       
     moduleService: ModuleService;
     sharedService: SharedService;
     module: Module;
+    modules :Module[];
 
     /**
      * 
@@ -30,6 +27,7 @@ export class RuntimeComponent{
        this.moduleService = ServiceLocator.injector.get(ModuleService);
        this.sharedService = ServiceLocator.injector.get(SharedService);
        this.module = this.sharedService.getModule();
+       this.modules = this.sharedService.getModules();
     }
 
     sendMessage(message:any):void{
@@ -47,30 +45,78 @@ export class RuntimeComponent{
      */
     public login() {
         console.log("Login function call");
-        var data ={"pageType":ServiceLocator.homePageTypeValue,"moduleName":null};
-        data.pageType = ServiceLocator.homePageTypeValue;
-        data.moduleName = null;
-        this.sendMessage(data);
+        this.loadModules();
+       
     }
+   
 
     public logout(){
         console.log("LOGIN OUT function call");
-        var data ={"pageType":null,"moduleName":null};
+        var data ={"pageType":null,"moduleName":null,"type":ServiceLocator.typeEvents[0]};
         data.pageType = ServiceLocator.loginPageTypeValue;
         data.moduleName = null;
         this.sendMessage(data);
     }
 
-    
-    public loadModule(name: string) {
-        console.log("Call of load module "+name);
+    /**
+     * showFragment
+      type: string ,endPoint: string     
+   */
+    public getSelectNode(node :Navigation) {
+        this.sharedService.setNavNode(node);
+        var data ={"pageType":null,"moduleName":null ,
+                   "type":ServiceLocator.typeEvents[1],"action":ServiceLocator.actions[0]
+                  };
+        data.pageType = ServiceLocator.modulePageTypeValue;
+        data.moduleName = name;
+        this.sendMessage(data);       
+    }
+    /**
+     * showModulePaget
+       name: string    
+     */
+    public showModulePage(name: string) {
+        this.loadModule(name);
+    }
+
+    /**
+     * showHomePage
+     */
+    public showHomePage() {
+        this.loadModules();
+    }
+
+     /**
+     * loadModules
+     */
+    private loadModules() {
+        this.moduleService.getInstallModules(this.sharedService.getOffset() , this.sharedService.getMax())
+            .toPromise()
+            .then(response =>{
+                var answers :Module[] = new Array();
+                response.forEach(mod =>{
+                    answers.push(Module.getInstance(mod));
+                });
+              this.sharedService.setModules(answers);
+              var data ={"pageType":ServiceLocator.homePageTypeValue,"moduleName":null , "type":null};
+              data.pageType = ServiceLocator.homePageTypeValue;
+              data.moduleName = null;
+              data.type = ServiceLocator.typeEvents[0];
+              this.sendMessage(data);
+            }).catch(err =>{
+                console.error(err);
+            });
+    }
+
+    private loadModule(name: string) {
+       
         this.moduleService.getModuleByName(name).toPromise()
             .then(response =>{
                 this.sharedService.setModule(Module.getInstance(response));
-                console.log("Laod of Module : "+JSON.stringify(this.sharedService.getModule()));                
-                var data ={"pageType":null,"moduleName":null};
+                var data ={"pageType":null,"moduleName":null , "type":null};
                 data.pageType = ServiceLocator.modulePageTypeValue;
                 data.moduleName = name;
+                data.type = ServiceLocator.typeEvents[0];
                 this.sendMessage(data);
             }).catch(err =>{
                console.error(err);

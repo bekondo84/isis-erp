@@ -1,4 +1,5 @@
 import { from } from "rxjs";
+import { Fragmentcms } from "./fragmentcms";
 import { Pagecms } from './pagecms';
 
 export class ThemeCms {
@@ -10,6 +11,8 @@ export class ThemeCms {
     private loginTemplate: Pagecms;
     private homeTemplate: Pagecms;
     private moduleTemplate: Pagecms;
+    private listTemplate: Fragmentcms;
+    private viewTemplate: Fragmentcms;
 
     constructor(pK: number , code: string ,name: string, active: boolean){
         this.pK = pK;
@@ -25,6 +28,8 @@ export class ThemeCms {
     setLoginTemplate(template: Pagecms){ this.loginTemplate = template ;}
     setHomeTemplate(template: Pagecms){ this.homeTemplate = template ;}
     setModuleTemplate(template: Pagecms){ this.moduleTemplate = template ;}
+    setListTemplate(template: Fragmentcms){this.listTemplate = template; }
+    setViewTemplate(template: Fragmentcms){ this.viewTemplate = template; }
 
     getPK(): number { return this.pK; }
     getCode() :string { return this.code ;}
@@ -39,4 +44,6 @@ export class ThemeCms {
     getModuleTemplate(): Pagecms {
         return this.moduleTemplate;
     }
+    getListTemplate(){ return this.listTemplate; }
+    getViewTemplate(){ return this.viewTemplate; }
 }

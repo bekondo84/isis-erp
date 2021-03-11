@@ -9,6 +9,8 @@ export class Navigation {
     private type: string;
     private viewMode: string;
     private modal: boolean;
+    private viewFagKey: string ;
+    private listFragKey : string;
     private nodes :Navigation[]
 
     constructor(code: string, activate:boolean, icon:string, label:string, position:number,level:string){
@@ -36,6 +38,10 @@ export class Navigation {
     getModal(){ return this.modal ;}
     setModal(modal: boolean){ this.modal = modal ;}
     getNodes(){ return this.nodes; }
+    getListFragKey(){ return this.listFragKey; }
+    setListFragKey(frag :string){this.listFragKey = frag; }
+    getViewFragKey(){ return this.viewFagKey; }
+    setViewFragKey(frag :string){ this.viewFagKey = frag ;}
 
     static getNavigation(node: any){
         let nav = new Navigation(node.code, node.activate,node.icon,node.label,node.position,node.level);        
@@ -43,6 +49,8 @@ export class Navigation {
         nav.setType(node.type);
         nav.setViewMode(node.viewMode);
         nav.setModal(node.modal);
+        nav.setListFragKey(node.listTemplateKey);
+        nav.setViewFragKey(node.viewTemplateKey);
 
         if(node.navigations != null){
             node.navigations.forEach(element => {
