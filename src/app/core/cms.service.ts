@@ -32,8 +32,8 @@ export class CmsService {
    * @param code 
    * @returns 
    */
-  public getFragment(code: string){
-    return this.fragmentService.getFragment(code);
+  public getFragment(code: string , type :string){
+    return this.fragmentService.getFragment(code ,type);
   }
 
 }

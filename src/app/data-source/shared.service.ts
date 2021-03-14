@@ -17,6 +17,8 @@ export class SharedService {
   getMax(){ return this.max;}
   getNavNode(){ return this.navNode;}
   getTheme(){ return this.theme ;}
+  getMetaData(){ return this.metaData ;}
+  getCurrentData(){ return this.currentData ;}
 
   getModules(){ return this.modules ;}
   setModules(modules: Module[]){ this.modules = modules ;}
@@ -24,6 +26,8 @@ export class SharedService {
   setMax(max :number){ this.max = max ;}
   setNavNode(node :Navigation){ this.navNode = node ;}
   setTheme(theme: ThemeCms){ this.theme = theme ; }
+  setMetaData(meta : any){ this.metaData =meta; }
+  setCurrentData(val :any){ this.currentData = val ;}
 
   private module :Module ;
   private modules :Module[] = [];
@@ -31,4 +35,6 @@ export class SharedService {
   private offset :number = 0 ;
   private max :number =100;
   private navNode :Navigation;
+  private metaData : any ;
+  private currentData : any;
 }

@@ -68,7 +68,6 @@ export class RuntimeComponent{
                    "type":ServiceLocator.typeEvents[1],"action":ServiceLocator.actions[0]
                   };
         data.pageType = ServiceLocator.modulePageTypeValue;
-        data.moduleName = name;
         this.sendMessage(data);       
     }
     /**

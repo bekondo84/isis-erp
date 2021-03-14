@@ -10,8 +10,8 @@ export class FragmentService {
 
   constructor(private http: HttpClient , private configService: ConfigService) { }
 
-  getFragment(name :string){
-    var url = `http://localhost:8080/backoffice/cms/fragment/${name}`;
+  getFragment(name :string ,type :string){
+    var url = `http://localhost:8080/backoffice/cms/fragment/${name}/${type}`;
     return  this.http.get<Fragmentcms>(url);
   }
 }

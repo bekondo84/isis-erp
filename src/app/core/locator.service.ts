@@ -11,6 +11,6 @@ export class ServiceLocator {
   static homePageTypeValue : string = "home";
   static modulePageTypeValue : string = "module";
   static typeEvents : Array<string> =["PAGE","FRAGMENT"];
-  static actions: Array<string> =["init"];
+  static actions: Array<string> =["init" ,"create" ,"cancel","edit","save","delete"];
   
 }
