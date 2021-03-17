@@ -21,13 +21,14 @@ export class ViewComponent implements OnInit   {
   metadata : any ;
   searchFields :Array<any> = [];
   selected: boolean = false ;
+  context : any;
 
   constructor() { 
     this.loader =  ServiceLocator.injector.get(MessageService);
     this.dataModelService = ServiceLocator.injector.get(DataModelService);
     this.sharedService = ServiceLocator.injector.get(SharedService);  
     this.currentNode = this.sharedService.getNavNode();
-    this.currentData = this.sharedService.getCurrentData();
+    this.currentData = this.sharedService.getCurrentData();    
     this.loadMetaDataAndDatas();
   }
 
@@ -127,6 +128,13 @@ clearMessage(): void {
            });
   }
 
+  onSearchChange(value : string , type: string){
+    console.info("onSearchChange called value : "+value+" **** Type : "+type);
+  }
+
+  selectOption(e){
+    console.warn("Select option Change with valleu : "+e.target.value )
+  }
   deleteItemsAction(){
     console.log("CLICK ON DELETE SELECTED ITEMS");
   }

@@ -66,28 +66,12 @@ export class FragmentComponent implements OnInit   {
 
     viewFragment(){
       let fragmentCode = this.currentNode.getViewFragKey();
-      if(fragmentCode == null){
-        let theme : ThemeCms = this.sharedService.getTheme();
-        if(theme != null && theme.getViewTemplate() != null){
-          fragmentCode = theme.getViewTemplate().getCode();
-        }else{
-          //Error back config object
-        }
-      }
-        this.loadListFragment(fragmentCode ,this.currentNode.getType());
+      this.loadListFragment(fragmentCode ,this.currentNode.getType(),ServiceLocator.ViewMode);
     }
 
     listFragment(){
-      let fragmentCode = this.currentNode.getListFragKey();
-      if(fragmentCode == null){
-        let theme : ThemeCms = this.sharedService.getTheme();
-        if(theme != null && theme.getListTemplate() != null){
-          fragmentCode = theme.getListTemplate().getCode();
-        }else{
-          //Error back config object
-        }
-      }
-      this.loadListFragment(fragmentCode ,this.currentNode.getType());
+      let fragmentCode = this.currentNode.getListFragKey();      
+      this.loadListFragment(fragmentCode ,this.currentNode.getType() ,ServiceLocator.ListMode);
     }
 
     initFragment(){
@@ -99,14 +83,13 @@ export class FragmentComponent implements OnInit   {
 
       if(viewModes[0]===ServiceLocator.ViewMode && this.currentNode.getModal()===false){
         //console.log("VIEW AND Non Modal : "+this.currentNode.getViewMode()+" ======= "+viewModes[0]);
-        this.compileTemplate(this.getTemplate(),[]);  
+        //this.compileTemplate(this.getTemplate(),[]);  
       }
       
     }
 
-    loadListFragment(code :string ,type :string){
-        //console.log("*********************** --------------- "+type);
-        this.cmsService.getFragment(code , type).toPromise()
+    loadListFragment(code :string ,type :string ,viewMode: string){
+        this.cmsService.getFragment(code , type ,viewMode).toPromise()
                .then(response =>{
                    let fragment = Fragmentcms.getFragment(response);
                    var styles :string ="";

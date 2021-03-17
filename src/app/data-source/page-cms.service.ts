@@ -23,5 +23,19 @@ export class PageCmsService {
       return  this.http.get<Pagecms>(url);
   }
 
+  getLoginPage(){
+    var url = `http://localhost:8080/backoffice/cms/login`;
+    return  this.http.get<Pagecms>(url);
+  }
+
+  getHomePage(){
+    var url = `http://localhost:8080/backoffice/cms/home`;
+    return  this.http.get<Pagecms>(url);
+  }
+
+  getApplicationPage(){
+    var url = `http://localhost:8080/backoffice/cms/application`;
+    return  this.http.get<Pagecms>(url);
+  }
  
 }

@@ -82,33 +82,7 @@ export class IsisViewComponent implements OnInit {
      return new Fragmentcms(value.pK,value.code,value.name,value.cssStyle,value.htmlTemplate);
   }
  
-  /**
-   * 
-   * @param response 
-   */
-  setCurrentTheme(response: any){
-      this.theme = new ThemeCms(response.pK,response.code,response.name,response.active);
-      if(response.loginTemplate != null){
-          this.theme.setLoginTemplate(this.getPage(response.loginTemplate));
-      }
-
-      if(response.homeTemplate != null){
-        this.theme.setHomeTemplate(this.getPage(response.homeTemplate));
-      }
-
-      if(response.moduleTemplate != null){
-        this.theme.setModuleTemplate(this.getPage(response.moduleTemplate));
-      }
-
-      if(response.listTemplate != null){
-        this.theme.setListTemplate(this.getFragment(response.listTemplate));
-      }
-
-      if(response.viewTemplate != null){
-        this.theme.setViewTemplate(this.getFragment(response.viewTemplate));
-      }
-      this.sharedService.setTheme(this.theme);
-  }
+  
   /**
      * Section of function
      */
@@ -123,17 +97,8 @@ export class IsisViewComponent implements OnInit {
    * 
    * @param pagetype Show page to load
    */
-  public showPage(pagetype: string){
-      this.pageTemplate = this.theme.getLoginTemplate();
-      
-      if(pagetype===ServiceLocator.homePageTypeValue){
-        this.pageTemplate = this.theme.getHomeTemplate();
-      }
-
-      if(pagetype===ServiceLocator.modulePageTypeValue){
-        this.pageTemplate = this.theme.getModuleTemplate();
-      }
-      this.cmsService.getTemplatePage(this.pageTemplate.getCode())
+  public showPage(pagetype: string){     
+      this.cmsService.getTemplatePage(pagetype)
                        .toPromise()
                        .then(response => {
                         this.pageTemplate = this.getPage(response);
@@ -158,17 +123,7 @@ export class IsisViewComponent implements OnInit {
 
 
   ngOnInit(){   
-    if(this.theme == null){
-      this.cmsService.getActiveTheme()
-          .toPromise()
-          .then((response) =>{
-            this.setCurrentTheme(response);
-            this.showView(ServiceLocator.loginPageTypeValue ,null);            
-          }).catch((error) =>{
-             console.error(error);
-          });      
-    }
-      
+    this.showView(ServiceLocator.loginPageTypeValue ,null);         
   }
 
   ngOnChanges() {
@@ -193,9 +148,7 @@ export class IsisViewComponent implements OnInit {
   message: any;
   
   subscription: Subscription;
-
-  theme: ThemeCms;
-
+ 
   pageTemplate: Pagecms;
 
   session: any = null;
