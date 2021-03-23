@@ -22,7 +22,7 @@ import { ViewComponent } from './view.component';
 })
 export class FragmentComponent implements OnInit   {
 
-  @ViewChild(FragmentDirective , { static: true } ) 
+  @ViewChild(FragmentDirective ) 
   adHost: FragmentDirective;
   
 

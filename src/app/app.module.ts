@@ -8,12 +8,13 @@ import { IsisViewComponent } from './core/isis-view/isis-view.component';
 import { ServiceLocator } from './core/locator.service';
 import { FormsModule } from '@angular/forms';
 
+
 @NgModule({
   declarations: [
     AppComponent 
   ],
   imports: [
-    BrowserModule ,FormsModule ,CoreModule
+    BrowserModule ,FormsModule ,CoreModule 
   ],
   providers: [],
   bootstrap: [AppComponent]
