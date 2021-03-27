@@ -25,7 +25,7 @@ export class IsisViewComponent implements OnInit {
       private compiler: Compiler ,private messageService: MessageService ,
       private moduleService: ModuleService ,private sharedService: SharedService) {
         this.subscription = this.messageService.getMessage().subscribe(message=>{
-         
+         console.log("INSIDE ISIS_VIEW_COMPONENT : "+JSON.stringify(message));
           if(message.data.type===ServiceLocator.typeEvents[0]){
            this.showView(message.data.pageType ,message.data.moduleName);
           }          
@@ -62,7 +62,7 @@ export class IsisViewComponent implements OnInit {
       const cmpClass = componentClass || class RuntimeComponent { name: string = 'Denys' };
       const decoratedCmp = Component(metadata)(cmpClass);
        
-      @NgModule({ imports: [CommonModule,CoreModule], declarations: [decoratedCmp] })
+      @NgModule({ imports: [CommonModule], declarations: [decoratedCmp] })
       class RuntimeComponentModule { }
      try{
        //Clear the cache before create new module

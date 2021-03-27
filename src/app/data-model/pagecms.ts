@@ -32,4 +32,9 @@ export class Pagecms {
    getHtmlTemplate(){ return this.htmlTemplate; }
    setHtmlTemplate(value: string){ this.htmlTemplate = value; }
     
+   static getPage(value : any) : Pagecms{
+      let page : Pagecms = new Pagecms(value.pK,value.code,value.name,value.cssStyle,value.htmlTemplate);
+
+      return page ;
+   }
 }

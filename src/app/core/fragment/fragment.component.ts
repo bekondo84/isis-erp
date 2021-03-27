@@ -142,7 +142,7 @@ export class FragmentComponent implements OnInit   {
     const cmpClass = componentClass || class ViewComponent { name: string = 'Denys' };
     const decoratedCmp = Component(metadata)(cmpClass);
      
-    @NgModule({ imports: [FormsModule ,CommonModule,CoreModule], declarations: [decoratedCmp] })
+    @NgModule({ imports: [FormsModule ,CommonModule], declarations: [decoratedCmp] })
     class ViewComponentModule { }
    try{
      //Clear the cache before create new module

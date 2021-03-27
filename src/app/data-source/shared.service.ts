@@ -19,6 +19,9 @@ export class SharedService {
   getTheme(){ return this.theme ;}
   getMetaData(){ return this.metaData ;}
   getCurrentData(){ return this.currentData ;}
+  push(data : any){ this.stack.push(data); }
+  pop(){ return this.stack.pop();}
+  getStaskhead(){ return this.stack[this.stack.length-1];}
 
   getModules(){ return this.modules ;}
   setModules(modules: Module[]){ this.modules = modules ;}
@@ -37,4 +40,5 @@ export class SharedService {
   private navNode :Navigation;
   private metaData : any ;
   private currentData : any;
+  private stack : any[] = new Array();
 }

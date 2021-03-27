@@ -1,10 +1,12 @@
 import { AfterContentChecked, AfterViewInit, Component, ComponentFactoryResolver, ElementRef, OnInit, TemplateRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Navigation } from 'src/app/data-model/navigation';
 import { DataModelService } from 'src/app/data-source/data-model.service';
 import { SharedService } from 'src/app/data-source/shared.service';
 import { FragmentDirective } from '../fragment.directive';
 import { ServiceLocator } from '../locator.service';
 import { MessageService } from '../message.service';
+import { ModalComponent } from '../modal/modal.component';
 
 @Component({
   selector: 'view',
@@ -23,7 +25,7 @@ export class ViewComponent implements OnInit   {
   selected: boolean = false ;
   context : any;
 
-  constructor() { 
+  constructor(public dialog: MatDialog) { 
     this.loader =  ServiceLocator.injector.get(MessageService);
     this.dataModelService = ServiceLocator.injector.get(DataModelService);
     this.sharedService = ServiceLocator.injector.get(SharedService);  
@@ -128,6 +130,23 @@ clearMessage(): void {
            });
   }
 
+  createOnField(type: string){
+    //console.log("CREATE ON FIELD  ===== "+type+"  === "+JSON.stringify(this.sharedService));
+    this.dataModelService.getEmptyInstance(type).toPromise()
+         .then(response => {
+              this.sharedService.push(response);
+              const dialogRef = this.dialog.open(ModalComponent ,{
+                data: {type: type , mode: ServiceLocator.ViewMode ,data : response}
+            });
+            dialogRef.afterClosed().subscribe(result =>{
+              console.log('The dialog was closed');
+            });
+         }).catch(err => {
+           console.error(err);
+         });
+     
+  }
+  
   onSearchChange(value : string , type: string){
     console.info("onSearchChange called value : "+value+" **** Type : "+type);
   }

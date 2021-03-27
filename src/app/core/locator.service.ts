@@ -10,6 +10,7 @@ export class ServiceLocator {
   static loginPageTypeValue : string = "login";
   static homePageTypeValue : string = "home";
   static modulePageTypeValue : string = "module";
+  static dialogTemplate : string = "default_modal_Fragment";
   static typeEvents : Array<string> =["PAGE","FRAGMENT"];
   static actions: Array<string> =["init" ,"create" ,"cancel","edit","save","delete"];
   
